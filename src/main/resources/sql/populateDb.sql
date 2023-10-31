@@ -1,0 +1,33 @@
+DELETE FROM USERS;
+DELETE FROM RESTAURANTS;
+DELETE FROM DISHES;
+ALTER SEQUENCE GLOBAL_SEQ START WITH 100000;
+
+INSERT INTO USERS (NAME, EMAIL)
+VALUES ('User', 'User@gmail.com'),
+       ('Admin', 'Admin@gmail.com');
+
+INSERT INTO ROLES (ROLE, USER_ID)
+VALUES ('USER', 100000),
+       ('ADMIN', 100001);
+
+INSERT INTO RESTAURANTS (NAME)
+VALUES ('VESUVIO'),
+       ('GONG');
+
+INSERT INTO DISHES (NAME, PRICE, RESTAURANT_ID)
+VALUES ('Zitti', 12, 100002),
+       ('Prosciutto pizza', 15, 100002),
+       ('Tiramisu', 7, 100002),
+       ('Limonchello', 8, 100002);
+
+INSERT INTO DISHES (NAME, PRICE, RESTAURANT_ID)
+VALUES ('Chicken Teriyaki', 15, 100003),
+       ('Pad tai', 10, 100003),
+       ('Tom Kha', 15, 100003),
+       ('Sodju', 8, 100003);
+
+-- SELECT * FROM USERS;
+-- SELECT * FROM RESTAURANTS;
+-- SELECT * FROM DISHES;
+-- SELECT * FROM ROLES;

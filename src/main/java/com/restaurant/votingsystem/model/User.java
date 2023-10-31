@@ -11,7 +11,7 @@ import java.util.Set;
 public class User {
 
     @Id
-    private int id;
+    private Integer id;
 
     @Column
     @NotBlank
@@ -23,7 +23,7 @@ public class User {
     private String email;
 
     @Column
-    private String restaurantVotedId;
+    private Integer restaurantVotedId;
 
     //check n+1 problem
     @CollectionTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "user_id"))
@@ -35,7 +35,7 @@ public class User {
     public User() {
     }
 
-    public User(int id, String name, String email, String restaurantVotedId, Set<Role> roles) {
+    public User(int id, String name, String email, Integer restaurantVotedId, Set<Role> roles) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -59,11 +59,11 @@ public class User {
         this.name = name;
     }
 
-    public String getRestaurantVotedId() {
+    public Integer getRestaurantVotedId() {
         return restaurantVotedId;
     }
 
-    public void setRestaurantVotedId(String restaurantVotedId) {
+    public void setRestaurantVotedId(Integer restaurantVotedId) {
         this.restaurantVotedId = restaurantVotedId;
     }
 
