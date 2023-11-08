@@ -1,32 +1,43 @@
 package com.restaurant.votingsystem.model;
 
 
+import org.hibernate.validator.constraints.Length;
+import org.springframework.util.CollectionUtils;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "unique_email")})
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "unique_email")})
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(name = "name")
     @NotBlank
     private String name;
 
-    @Column
+    @Column(name = "password")
+    @Length(min = 5)
+    @NotBlank
+    private String password;
+
+    @Column(name = "email")
     @Email
     @NotBlank
     private String email;
 
-    @Column
+    @Column(name = "restaurant_voted_id")
     private Integer restaurantVotedId;
 
-    //check n+1 problem
-    @CollectionTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "role")
@@ -35,19 +46,32 @@ public class User {
     public User() {
     }
 
-    public User(int id, String name, String email, Integer restaurantVotedId, Set<Role> roles) {
+    public User(Integer id, String name, String password, String email, Integer restaurantVotedId, Collection<Role> roles) {
         this.id = id;
         this.name = name;
+        this.password = password;
         this.email = email;
         this.restaurantVotedId = restaurantVotedId;
-        this.roles = roles;
+        setRoles(roles);
     }
 
-    public int getId() {
+    public User(Integer id, String name, String password, String email, Integer restaurantVotedId, Role...roles) {
+       this(id, name, password, email, restaurantVotedId, Arrays.asList(roles));
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+    }
+
+    public  boolean isNew(){
+        return id == null;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -73,5 +97,13 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
