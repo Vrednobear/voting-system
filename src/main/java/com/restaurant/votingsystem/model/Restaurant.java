@@ -1,5 +1,8 @@
 package com.restaurant.votingsystem.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -8,22 +11,27 @@ import java.util.List;
 public class Restaurant {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @OrderBy("price ASC")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OrderBy("price asc")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Dish> menu;
 
     public Restaurant() {
     }
 
-    public Restaurant(Integer id, String name, List<Dish> menu) {
+    public Restaurant(Integer id, String name) {
         this.id = id;
         this.name = name;
-        this.menu = menu;
+    }
+
+    public  boolean isNew(){
+        return id == null;
     }
 
     public Integer getId() {

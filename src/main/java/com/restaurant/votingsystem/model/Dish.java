@@ -1,9 +1,10 @@
 package com.restaurant.votingsystem.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
@@ -11,13 +12,20 @@ import java.math.BigDecimal;
 public class Dish {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
-    @Column
+    @Column(name = "price")
     private BigDecimal price;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @NotNull
+    private Restaurant restaurant;
 
     public Dish() {
     }
@@ -26,6 +34,10 @@ public class Dish {
         this.id = id;
         this.name = name;
         this.price = price;
+    }
+
+    public  boolean isNew(){
+        return id == null;
     }
 
     public Integer getId() {
@@ -50,5 +62,13 @@ public class Dish {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 }
